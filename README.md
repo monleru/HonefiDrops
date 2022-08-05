@@ -3,7 +3,3 @@
 >**Dutch Auction** - type of auction in the HoneFi ecosystem. The creator of the auction sets an initial price, which decreases with a certain interval of time by predetermined %, so that the bidders themselves determine the necessary entry point. You can buy at the start of the auction, or you can wait for the price to drop to the desired point. This type of auction adds excitement and helps in determining a fair price.
 >
 >**Balance Pool** - This type is a combination of two types of auctions - Dutch and British - the key feature of which is that users/buyers determine the fair price for each individual sale. The price changes depending on current demand/activity, either positively or negatively. If there are no purchases for a predetermined time, the price decreases, and if there are active purchases for a short distance, the price increases. This allows to create an optimal balance for each user, at the same time cutting off any bots' activity.
-
-| test | test | test |
-| ------------- |:------------------:| -----:|
-| test | test | test
