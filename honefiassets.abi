@@ -1,0 +1,381 @@
+{
+    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT ",
+    "version": "eosio::abi/1.1",
+    "types": [],
+    "structs": [
+        {
+            "name": "config",
+            "base": "",
+            "fields": []
+        },
+        {
+            "name": "createdrop",
+            "base": "",
+            "fields": [
+                {
+                    "name": "dropnum",
+                    "type": "int32"
+                },
+                {
+                    "name": "changeprice",
+                    "type": "int32"
+                },
+                {
+                    "name": "changepricetime",
+                    "type": "int32"
+                },
+                {
+                    "name": "format",
+                    "type": "string"
+                },
+                {
+                    "name": "username",
+                    "type": "name"
+                },
+                {
+                    "name": "collection",
+                    "type": "name"
+                },
+                {
+                    "name": "shemas",
+                    "type": "name"
+                },
+                {
+                    "name": "templates",
+                    "type": "uint32"
+                },
+                {
+                    "name": "price",
+                    "type": "asset"
+                },
+                {
+                    "name": "supply",
+                    "type": "int32"
+                },
+                {
+                    "name": "dropstart",
+                    "type": "uint64"
+                },
+                {
+                    "name": "dropend",
+                    "type": "uint64"
+                },
+                {
+                    "name": "img",
+                    "type": "string"
+                },
+                {
+                    "name": "drop_name",
+                    "type": "string"
+                },
+                {
+                    "name": "description",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "name": "drop",
+            "base": "",
+            "fields": [
+                {
+                    "name": "dropnum",
+                    "type": "int32"
+                },
+                {
+                    "name": "format",
+                    "type": "string"
+                },
+                {
+                    "name": "username",
+                    "type": "name"
+                },
+                {
+                    "name": "collection",
+                    "type": "name"
+                },
+                {
+                    "name": "shemas",
+                    "type": "name"
+                },
+                {
+                    "name": "templates",
+                    "type": "uint32"
+                },
+                {
+                    "name": "startprice",
+                    "type": "asset"
+                },
+                {
+                    "name": "price",
+                    "type": "asset"
+                },
+                {
+                    "name": "changepricetime",
+                    "type": "int32"
+                },
+                {
+                    "name": "changeprice",
+                    "type": "int32"
+                },
+                {
+                    "name": "supply",
+                    "type": "int32"
+                },
+                {
+                    "name": "maxsupply",
+                    "type": "int32"
+                },
+                {
+                    "name": "dropstart",
+                    "type": "uint64"
+                },
+                {
+                    "name": "dropend",
+                    "type": "uint64"
+                },
+                {
+                    "name": "lastbuy",
+                    "type": "uint64"
+                },
+                {
+                    "name": "img",
+                    "type": "string"
+                },
+                {
+                    "name": "drop_name",
+                    "type": "string"
+                },
+                {
+                    "name": "description",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "name": "dropconfig",
+            "base": "",
+            "fields": [
+                {
+                    "name": "username",
+                    "type": "name"
+                },
+                {
+                    "name": "dropnum",
+                    "type": "int32"
+                }
+            ]
+        },
+        {
+            "name": "dropremove",
+            "base": "",
+            "fields": [
+                {
+                    "name": "drop_id",
+                    "type": "int32"
+                }
+            ]
+        },
+        {
+            "name": "newuser",
+            "base": "",
+            "fields": [
+                {
+                    "name": "username",
+                    "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "setchangepr",
+            "base": "",
+            "fields": [
+                {
+                    "name": "drop_id",
+                    "type": "int32"
+                },
+                {
+                    "name": "changeprice",
+                    "type": "int32"
+                },
+                {
+                    "name": "changepricetime",
+                    "type": "int32"
+                }
+            ]
+        },
+        {
+            "name": "setdroptime",
+            "base": "",
+            "fields": [
+                {
+                    "name": "drop_id",
+                    "type": "int32"
+                },
+                {
+                    "name": "dropstart",
+                    "type": "uint64"
+                },
+                {
+                    "name": "dropend",
+                    "type": "uint64"
+                }
+            ]
+        },
+        {
+            "name": "setinfo",
+            "base": "",
+            "fields": [
+                {
+                    "name": "drop_id",
+                    "type": "int32"
+                },
+                {
+                    "name": "img",
+                    "type": "string"
+                },
+                {
+                    "name": "drop_name",
+                    "type": "string"
+                },
+                {
+                    "name": "description",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "name": "setprice",
+            "base": "",
+            "fields": [
+                {
+                    "name": "drop_id",
+                    "type": "int32"
+                },
+                {
+                    "name": "price",
+                    "type": "asset"
+                }
+            ]
+        },
+        {
+            "name": "setslip",
+            "base": "",
+            "fields": [
+                {
+                    "name": "username",
+                    "type": "name"
+                },
+                {
+                    "name": "slip",
+                    "type": "float32"
+                }
+            ]
+        },
+        {
+            "name": "setsupply",
+            "base": "",
+            "fields": [
+                {
+                    "name": "drop_id",
+                    "type": "int32"
+                },
+                {
+                    "name": "supply",
+                    "type": "int32"
+                }
+            ]
+        },
+        {
+            "name": "user",
+            "base": "",
+            "fields": [
+                {
+                    "name": "username",
+                    "type": "name"
+                },
+                {
+                    "name": "slip",
+                    "type": "float32"
+                }
+            ]
+        }
+    ],
+    "actions": [
+        {
+            "name": "config",
+            "type": "config",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "createdrop",
+            "type": "createdrop",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "dropremove",
+            "type": "dropremove",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "newuser",
+            "type": "newuser",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "setchangepr",
+            "type": "setchangepr",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "setdroptime",
+            "type": "setdroptime",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "setinfo",
+            "type": "setinfo",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "setprice",
+            "type": "setprice",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "setslip",
+            "type": "setslip",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "setsupply",
+            "type": "setsupply",
+            "ricardian_contract": ""
+        }
+    ],
+    "tables": [
+        {
+            "name": "config",
+            "type": "dropconfig",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        },
+        {
+            "name": "dropsssl",
+            "type": "drop",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        },
+        {
+            "name": "users",
+            "type": "user",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        }
+    ],
+    "ricardian_clauses": [],
+    "variants": []
+}
