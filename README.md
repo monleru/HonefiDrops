@@ -1,2 +1,1 @@
-# Honefi-Drops
-HoneFi smart contract to create and manage auctions
+# HoneFi (honefi.app) is a decentralized system for conducting token sales and creating auctions that helps in determining a fair price, as well as combating bot farms, creating an ideal environment for honest individual buyers. The system is fully autonomous and can work at any time, even when the site is inaccessible, due to the use of smart contracts for each type of sale. Honefi includes a Dutch auction and balance pool
