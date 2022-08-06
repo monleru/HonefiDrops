@@ -305,52 +305,52 @@
         {
             "name": "config",
             "type": "config",
-            "ricardian_contract": ""
+            "ricardian_contract": "Administrative function"
         },
         {
             "name": "createdrop",
             "type": "createdrop",
-            "ricardian_contract": ""
+            "ricardian_contract": "Creating a new auction"
         },
         {
             "name": "dropremove",
             "type": "dropremove",
-            "ricardian_contract": ""
+            "ricardian_contract": "Remove auction"
         },
         {
             "name": "newuser",
             "type": "newuser",
-            "ricardian_contract": ""
+            "ricardian_contract": "Acceptance of the auction agreement"
         },
         {
             "name": "setchangepr",
             "type": "setchangepr",
-            "ricardian_contract": ""
+            "ricardian_contract": "Setting the percentage of change in price and time of change"
         },
         {
             "name": "setdroptime",
             "type": "setdroptime",
-            "ricardian_contract": ""
+            "ricardian_contract": "Setting the start and end time of the auction"
         },
         {
             "name": "setinfo",
             "type": "setinfo",
-            "ricardian_contract": ""
+            "ricardian_contract": "Text descriptions and auction graphics"
         },
         {
             "name": "setprice",
             "type": "setprice",
-            "ricardian_contract": ""
+            "ricardian_contract": "Specifying the starting price of the auction"
         },
         {
             "name": "setslip",
             "type": "setslip",
-            "ricardian_contract": ""
+            "ricardian_contract": "Slippage setting"
         },
         {
             "name": "setsupply",
             "type": "setsupply",
-            "ricardian_contract": ""
+            "ricardian_contract": "Setting the number of NFTs allocated to the auction"
         }
     ],
     "tables": [
@@ -376,6 +376,11 @@
             "key_types": []
         }
     ],
-    "ricardian_clauses": [],
+    "ricardian_clauses": [
+        {
+            "id": "Warranty",
+            "body": "The invoker of the contract action shall uphold its Obligations under this Contract in a timely and workmanlike manner, using knowledge and recommendations for performing the services which meet generally acceptable standards set forth by WAX.IO Blockchain Block Producers."
+        }
+    ],
     "variants": []
 }

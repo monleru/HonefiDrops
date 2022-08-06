@@ -2,7 +2,7 @@
   "main": "src/honefiassets.cpp",
   "contract": "honefiassets",
   "include": "",
-  "resource": "",
+  "resource": "ricardian",
   "cdt": "v1.6.3",
   "output": "",
   "scripts": {
@@ -16,6 +16,6 @@
     "local": ""
   },
   "test": {
-    "npmClient": ""
+    "npmClient": "yarn"
   }
 }
