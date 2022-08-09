@@ -32,8 +32,6 @@ CONTRACT honefiassets : public contract {
       ACTION createdrop(int dropnum, int changeprice,int changepricetime, string format, name username, name collection, name shemas, uint32_t templates, asset price, int supply, uint64_t dropstart, uint64_t dropend, string img,string drop_name, string description);
       [[eosio::on_notify("eosio.token::transfer")]]
       void token_transfer(name from,name to, asset asset_ids, string memo);
-      [[eosio::on_notify("eosio::buyrambytes")]]
-      void buy_ram(name payer,name receiver, uint32_t bytes);
       ACTION newuser(name username);
       ACTION setslip(name username, float slip);
       ACTION dropremove(int drop_id);

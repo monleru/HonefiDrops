@@ -16,6 +16,6 @@
     "local": ""
   },
   "test": {
-    "npmClient": "yarn"
+    "npmClient": ""
   }
 }
