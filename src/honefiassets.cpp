@@ -63,7 +63,16 @@ void honefiassets::token_transfer(name from,name to, asset quantity, string memo
   if (to != get_self() || from == get_self()) return;
   in_contract_claim(from, memo, quantity);
   require_recipient(from);
-  }
+}
+//User ram
+void honefiassets::buy_ram(name payer,name receiver, uint32_t bytes){
+  if (receiver != get_self() || payer == get_self()) return;
+  auto itr_user = users_config.find(payer.value);
+  users_config.modify ( itr_user, get_self(), [&](auto& row) {
+    row.ram += bytes;
+  });
+  require_recipient(payer);
+}
 ACTION honefiassets::dropremove(int drop_id){
   auto itr_drop = drop_table.find(drop_id);
   require_auth(itr_drop->username);
