@@ -42,7 +42,7 @@ ACTION honefiassets::newuser(name username){
   check ( itr == users_config.end(), "You already registr");
   users_config.emplace(username, [&](auto& row) {
     row.username = username;
-    row.slip = 2.5;
+    row.slipage = 2.5;
   });
 }
 // slippage
@@ -52,7 +52,7 @@ ACTION honefiassets::setslip(name username, float slip){
   auto itr = users_config.find(username.value);
   check ( itr != users_config.end(), "You need registr");
   users_config.modify(itr, username, [&](auto& row) {
-    row.slip = slip;
+    row.slipage = slip;
   });
 }
 
@@ -61,7 +61,14 @@ void honefiassets::token_transfer(name from,name to, asset quantity, string memo
   require_auth(from);
   // check transfer wallet
   if (to != get_self() || from == get_self()) return;
-  in_contract_claim(from, memo, quantity);
+  auto itr_user = users_config.find(from.value);
+  if ( itr_user == users_config.end() ) {
+    users_config.emplace(get_self(), [&](auto& row) {
+      row.username = from;
+      row.slipage = 2.5;
+      row.balance = quantity;
+    });
+  }
   require_recipient(from);
 }
 //User ram
@@ -81,14 +88,22 @@ ACTION honefiassets::config(){
   });
 }
 //mint
-void honefiassets::in_contract_claim(name username, string memo, asset quantity){
-  // memo(int)
-  int drop_id = stoi(memo);
+ACTION honefiassets::claimdrop ( name claimer, int drop_id, int claim_amount ){
+  require_auth(claimer);
+  auto itr_user = users_config.find(claimer.value);
+  check ( itr_user != users_config.end(), "Error");
+  asset quantity = itr_user->balance;
   //find drop table
   auto itr = drop_table.find(drop_id);
   // check drop in drop table
   check ( itr != drop_table.end(), "Invalid drop");
   // time
+  auto itr_rambalance = _rambalance.find(itr->collection.value);
+  check ( itr_rambalance->bytes >= 151, "The collection has no ram");
+  check ( itr_rambalance != _rambalance.end(), "The collection has no ram");
+  _rambalance.modify(itr_rambalance, claimer, [&](auto& row) {
+    row.bytes -= 151;
+  });
   uint64_t now = current_time_point().sec_since_epoch();
   // check drop start
   check( now >= itr->dropstart,"Drop didn't start");
@@ -103,6 +118,9 @@ void honefiassets::in_contract_claim(name username, string memo, asset quantity)
     float pricec = 1 - itr->changeprice/sss;
     pricec = pow(pricec, floor((now - itr->lastbuy)/itr->changepricetime));
     float price_now = itr->price.amount*pricec;
+    if ( price_now < 0.01 ) {
+      price_now = 0.01000000;
+    }
     // check token quality
     if (quantity.amount > price_now){
       // mint function
@@ -113,13 +131,12 @@ void honefiassets::in_contract_claim(name username, string memo, asset quantity)
         permission_level{get_self(), "active"_n},
         "atomicassets"_n,
         "mintasset"_n,
-        std::make_tuple(get_self(),itr->collection, itr->shemas, itr->templates, username, data, data, data)
+        std::make_tuple(get_self(),itr->collection, itr->shemas, itr->templates, claimer, data, data, data)
       }.send();
       // Return slippage
-      if ( quantity.amount > price_now){
-        quantity.amount = quantity.amount - price_now;
-        in_contract_transfer(username, quantity);
-      }
+      users_config.modify(itr_user, claimer, [&](auto& row) {
+        row.balance.amount -= price_now;
+      });
       // new price and new lastbuy time point
       drop_table.modify(itr, get_self(), [&](auto& row) {
         row.price.amount = price_now + (price_now / sss)*itr->changeprice;
@@ -153,7 +170,7 @@ void honefiassets::in_contract_claim(name username, string memo, asset quantity)
       permission_level{get_self(), "active"_n},
       "atomicassets"_n,
       "mintasset"_n,
-      std::make_tuple(get_self(),itr->collection, itr->shemas, itr->templates, username, data, data, data)
+      std::make_tuple(get_self(),itr->collection, itr->shemas, itr->templates, claimer, data, data, data)
     }.send();
     // change number of purchases
     drop_table.modify(itr, get_self(), [&](auto& row) {
@@ -218,5 +235,24 @@ ACTION honefiassets::setchangepr( int drop_id, int changeprice,int changepriceti
   drop_table.modify(itr_drop, get_self(), [&](auto& row) {
     row.changeprice = changeprice;
     row.changepricetime = changepricetime;
+  });
+}
+ACTION honefiassets::buyram( name username, name collection,  asset quant ) {
+  require_auth(username);
+  auto itr_user = users_config.find(username.value);
+  check ( quant.amount <= itr_user->balance.amount, "You don't have enough founds");
+  buyramproxy(collection, quant);
+  users_config.modify(itr_user, username, [&](auto& row) {
+    row.balance.amount -= quant.amount;
+  });
+}
+ACTION honefiassets::claimbalance( name username ){
+  require_auth(username);
+  auto itr_user = users_config.find(username.value);
+  check ( itr_user != users_config.end(), "You don't have founds");
+  check ( itr_user->balance.amount > 0, "You don't have founds");
+  in_contract_transfer(username, itr_user->balance);
+  users_config.modify(itr_user, username, [&](auto& row) {
+    row.balance.amount = 0;
   });
 }

@@ -4,6 +4,52 @@
     "types": [],
     "structs": [
         {
+            "name": "buyram",
+            "base": "",
+            "fields": [
+                {
+                    "name": "username",
+                    "type": "name"
+                },
+                {
+                    "name": "collection",
+                    "type": "name"
+                },
+                {
+                    "name": "quant",
+                    "type": "asset"
+                }
+            ]
+        },
+        {
+            "name": "claimbalance",
+            "base": "",
+            "fields": [
+                {
+                    "name": "username",
+                    "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "claimdrop",
+            "base": "",
+            "fields": [
+                {
+                    "name": "claimer",
+                    "type": "name"
+                },
+                {
+                    "name": "drop_id",
+                    "type": "int32"
+                },
+                {
+                    "name": "claim_amount",
+                    "type": "int32"
+                }
+            ]
+        },
+        {
             "name": "config",
             "base": "",
             "fields": []
@@ -309,17 +355,32 @@
                     "type": "name"
                 },
                 {
-                    "name": "slip",
+                    "name": "slipage",
                     "type": "float32"
                 },
                 {
-                    "name": "ram",
-                    "type": "int32"
+                    "name": "balance",
+                    "type": "asset"
                 }
             ]
         }
     ],
     "actions": [
+        {
+            "name": "buyram",
+            "type": "buyram",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "claimbalance",
+            "type": "claimbalance",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "claimdrop",
+            "type": "claimdrop",
+            "ricardian_contract": ""
+        },
         {
             "name": "config",
             "type": "config",
@@ -394,7 +455,7 @@
             "key_types": []
         },
         {
-            "name": "userinfo",
+            "name": "userbalance",
             "type": "user",
             "index_type": "i64",
             "key_names": [],

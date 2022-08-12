@@ -41,6 +41,9 @@ CONTRACT honefiassets : public contract {
       ACTION setinfo(int drop_id, string img, string drop_name, string description);
       ACTION setsupply( int drop_id, int supply);
       ACTION setchangepr( int drop_id, int changeprice,int changepricetime);
+      ACTION claimdrop ( name claimer, int drop_id, int claim_amount );
+      ACTION buyram( name username, name collection,  asset quant );
+      ACTION claimbalance( name username );
       
 
 
@@ -64,12 +67,13 @@ CONTRACT honefiassets : public contract {
     rammarket _rammarket;
     TABLE user {
         name username;
-        float slip;
-        int ram;
+        float slipage;
+        asset balance;
         auto primary_key() const { return username.value; }
       };
-      typedef multi_index<name("userinfo"), user> users;
+      typedef multi_index<name("userbalance"), user> users;
       users users_config;
+      //RAM balance table
       TABLE rambalance {
         name collection;
         uint64_t bytes;
@@ -108,7 +112,7 @@ CONTRACT honefiassets : public contract {
         };
         typedef multi_index<name("config"), dropconfig> configs;
         configs config_table;
-    void in_contract_claim(name username, string memo, asset quantity);
+    void in_contract_claim(name username, int drop_id, asset quantity);
     void in_contract_transfer(name username, asset quantity);
     void buyramproxy(name collection, asset quantity){
       // Call eosio contract to buy RAM
