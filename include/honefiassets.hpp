@@ -27,9 +27,24 @@ CONTRACT honefiassets : public contract {
         config_table(receiver, receiver.value),
         users_config(receiver, receiver.value),
         _rambalance(receiver,receiver.value),
-        _rammarket(EOSIO, EOSIO.value){}
+        _rammarket(EOSIO, EOSIO.value),
+        _tokendrop(receiver, receiver.value){}
     // registration user
-      ACTION createdrop(int dropnum, int changeprice,int changepricetime, string format, name username, name collection, name shemas, uint32_t templates, asset price, int supply, uint64_t dropstart, uint64_t dropend, string img,string drop_name, string description);
+      ACTION cnftdrop(
+        int changeprice,
+        int changepricetime, 
+        string format, 
+        name username, 
+        name collection, 
+        name shemas, 
+        uint32_t templates, 
+        asset price, 
+        int supply, 
+        uint64_t dropstart, 
+        uint64_t dropend, 
+        string img,
+        string drop_name, 
+        string description);
       [[eosio::on_notify("eosio.token::transfer")]]
       void token_transfer(name from,name to, asset asset_ids, string memo);
       ACTION newuser(name username);
@@ -43,11 +58,50 @@ CONTRACT honefiassets : public contract {
       ACTION setchangepr( int drop_id, int changeprice,int changepricetime);
       ACTION claimdrop ( name claimer, int drop_id, int claim_amount );
       ACTION buyram( name username, name collection,  asset quant );
-      ACTION claimbalance( name username );
-      
-
+      ACTION claimbalance( name username );      
+      ACTION ctokendrop(
+        name username, 
+        name collection,
+        string tokenticker,
+        name contract_adress,
+        int changeprice,
+        int changepricetime, 
+        int maxbuy_tx,
+        string format,
+        asset price, 
+        int supply, 
+        uint64_t dropstart, 
+        uint64_t dropend, 
+        string img,
+        string drop_name, 
+        string description);
 
   private:
+    TABLE tokendrop {
+      int dropnum;
+      name username;
+      name collection;
+      string tokenticker;
+      name contract_adress;
+      int changeprice;
+      int changepricetime; 
+      int maxbuy_tx;
+      string format;
+      asset startprice;
+      asset price;
+      int supply;
+      int maxsupply;
+      uint64_t dropstart; 
+      uint64_t dropend;
+      uint64_t lastbuy;
+      string img;
+      string drop_name;
+      string description;
+
+      auto primary_key() const { return dropnum; }
+    };
+    typedef multi_index<name("tokendrops"), tokendrop> tokendrops;
+    tokendrops _tokendrop;
     //Connector
     struct connector_item
     {

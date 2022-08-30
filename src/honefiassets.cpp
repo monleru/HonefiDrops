@@ -1,6 +1,6 @@
 #include <honefiassets.hpp>
 
-  ACTION honefiassets::createdrop(int dropnum, int changeprice,int changepricetime, string format, name username, name collection, name shemas, uint32_t templates, asset price, int supply, uint64_t dropstart, uint64_t dropend, string img,string drop_name, string description){
+  ACTION honefiassets::cnftdrop(int changeprice,int changepricetime, string format, name username, name collection, name shemas, uint32_t templates, asset price, int supply, uint64_t dropstart, uint64_t dropend, string img,string drop_name, string description){
   require_auth(username);
   check ( format == "balancer" || format == "dutch", "Invalid forman");
   atomicassets::collections_t  collections  = atomicassets::collections_t(atomicassets::ATOMICASSETS_ACCOUNT, atomicassets::ATOMICASSETS_ACCOUNT.value);
@@ -9,8 +9,8 @@
   // drop num table find
   auto now = current_time_point().sec_since_epoch();
   check ( now < dropstart, "The beggining connot be earlier than the current time" );
-  auto itr_dropnum = config_table.find(get_self().value);
   // Create drop
+  auto itr_dropnum = config_table.find(get_self().value);
   drop_table.emplace(username, [&](auto& row) {
     row.dropnum = itr_dropnum->dropnum + 1;
     row.format = format;
@@ -67,6 +67,11 @@ void honefiassets::token_transfer(name from,name to, asset quantity, string memo
       row.username = from;
       row.slipage = 2.5;
       row.balance = quantity;
+    });
+  }
+  else{
+    users_config.modify(itr_user, get_self(), [&](auto& row) {
+      row.balance.amount += quantity.amount;
     });
   }
   require_recipient(from);
@@ -256,3 +261,50 @@ ACTION honefiassets::claimbalance( name username ){
     row.balance.amount = 0;
   });
 }
+ACTION honefiassets::ctokendrop(
+  name username, 
+  name collection,
+  string tokenticker,
+  name contract_adress,
+  int changeprice,
+  int changepricetime, 
+  int maxbuy_tx,
+  string format,
+  asset price, 
+  int supply, 
+  uint64_t dropstart, 
+  uint64_t dropend, 
+  string img,
+  string drop_name, 
+  string description){
+  require_auth(username);
+  check ( format == "balancer" || format == "dutch", "Invalid forman");
+    auto now = current_time_point().sec_since_epoch();
+  check ( now < dropstart, "The beggining connot be earlier than the current time" );
+  // Create drop
+  auto itr_dropnum = config_table.find(get_self().value);
+  _tokendrop.emplace(username, [&](auto& row) {
+    row.dropnum = itr_dropnum->dropnum + 1;
+    row.format = format;
+    row.username = username;
+    row.collection = collection;
+    row.tokenticker = tokenticker;
+    row.contract_adress = contract_adress;
+    row.maxbuy_tx = maxbuy_tx;
+    row.startprice = asset{price.amount, price.symbol};
+    row.price = asset{price.amount, price.symbol};
+    row.changeprice = changeprice;
+    row.changepricetime = changepricetime;
+    row.maxsupply = supply;
+    row.dropstart = dropstart;
+    row.dropend = dropend;
+    row.lastbuy = dropstart;
+    row.img = img;
+    row.drop_name = drop_name;
+    row.description = description;
+  });
+  // drop num number + 1
+  config_table.modify(itr_dropnum, username, [&](auto& row) {
+  row.dropnum += 1;
+  });
+  }

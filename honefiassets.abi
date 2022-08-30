@@ -50,18 +50,9 @@
             ]
         },
         {
-            "name": "config",
-            "base": "",
-            "fields": []
-        },
-        {
-            "name": "createdrop",
+            "name": "cnftdrop",
             "base": "",
             "fields": [
-                {
-                    "name": "dropnum",
-                    "type": "int32"
-                },
                 {
                     "name": "changeprice",
                     "type": "int32"
@@ -89,6 +80,77 @@
                 {
                     "name": "templates",
                     "type": "uint32"
+                },
+                {
+                    "name": "price",
+                    "type": "asset"
+                },
+                {
+                    "name": "supply",
+                    "type": "int32"
+                },
+                {
+                    "name": "dropstart",
+                    "type": "uint64"
+                },
+                {
+                    "name": "dropend",
+                    "type": "uint64"
+                },
+                {
+                    "name": "img",
+                    "type": "string"
+                },
+                {
+                    "name": "drop_name",
+                    "type": "string"
+                },
+                {
+                    "name": "description",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "name": "config",
+            "base": "",
+            "fields": []
+        },
+        {
+            "name": "ctokendrop",
+            "base": "",
+            "fields": [
+                {
+                    "name": "username",
+                    "type": "name"
+                },
+                {
+                    "name": "collection",
+                    "type": "name"
+                },
+                {
+                    "name": "tokenticker",
+                    "type": "string"
+                },
+                {
+                    "name": "contract_adress",
+                    "type": "name"
+                },
+                {
+                    "name": "changeprice",
+                    "type": "int32"
+                },
+                {
+                    "name": "changepricetime",
+                    "type": "int32"
+                },
+                {
+                    "name": "maxbuy_tx",
+                    "type": "int32"
+                },
+                {
+                    "name": "format",
+                    "type": "string"
                 },
                 {
                     "name": "price",
@@ -347,6 +409,88 @@
             ]
         },
         {
+            "name": "tokendrop",
+            "base": "",
+            "fields": [
+                {
+                    "name": "dropnum",
+                    "type": "int32"
+                },
+                {
+                    "name": "username",
+                    "type": "name"
+                },
+                {
+                    "name": "collection",
+                    "type": "name"
+                },
+                {
+                    "name": "tokenticker",
+                    "type": "string"
+                },
+                {
+                    "name": "contract_adress",
+                    "type": "name"
+                },
+                {
+                    "name": "changeprice",
+                    "type": "int32"
+                },
+                {
+                    "name": "changepricetime",
+                    "type": "int32"
+                },
+                {
+                    "name": "maxbuy_tx",
+                    "type": "int32"
+                },
+                {
+                    "name": "format",
+                    "type": "string"
+                },
+                {
+                    "name": "startprice",
+                    "type": "asset"
+                },
+                {
+                    "name": "price",
+                    "type": "asset"
+                },
+                {
+                    "name": "supply",
+                    "type": "int32"
+                },
+                {
+                    "name": "maxsupply",
+                    "type": "int32"
+                },
+                {
+                    "name": "dropstart",
+                    "type": "uint64"
+                },
+                {
+                    "name": "dropend",
+                    "type": "uint64"
+                },
+                {
+                    "name": "lastbuy",
+                    "type": "uint64"
+                },
+                {
+                    "name": "img",
+                    "type": "string"
+                },
+                {
+                    "name": "drop_name",
+                    "type": "string"
+                },
+                {
+                    "name": "description",
+                    "type": "string"
+                }
+            ]
+        },
+        {
             "name": "user",
             "base": "",
             "fields": [
@@ -382,14 +526,19 @@
             "ricardian_contract": ""
         },
         {
+            "name": "cnftdrop",
+            "type": "cnftdrop",
+            "ricardian_contract": ""
+        },
+        {
             "name": "config",
             "type": "config",
             "ricardian_contract": "Administrative function"
         },
         {
-            "name": "createdrop",
-            "type": "createdrop",
-            "ricardian_contract": "Creating a new auction"
+            "name": "ctokendrop",
+            "type": "ctokendrop",
+            "ricardian_contract": ""
         },
         {
             "name": "dropremove",
@@ -450,6 +599,13 @@
         {
             "name": "rambalance",
             "type": "rambalance",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        },
+        {
+            "name": "tokendrops",
+            "type": "tokendrop",
             "index_type": "i64",
             "key_names": [],
             "key_types": []
