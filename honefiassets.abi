@@ -4,6 +4,20 @@
     "types": [],
     "structs": [
         {
+            "name": "TOKEN_TICKER",
+            "base": "",
+            "fields": [
+                {
+                    "name": "ticker",
+                    "type": "string"
+                },
+                {
+                    "name": "num",
+                    "type": "int32"
+                }
+            ]
+        },
+        {
             "name": "buyram",
             "base": "",
             "fields": [
@@ -50,17 +64,27 @@
             ]
         },
         {
-            "name": "cnftdrop",
+            "name": "claimtdrop",
             "base": "",
             "fields": [
                 {
-                    "name": "changeprice",
+                    "name": "claimer",
+                    "type": "name"
+                },
+                {
+                    "name": "drop_id",
                     "type": "int32"
                 },
                 {
-                    "name": "changepricetime",
-                    "type": "int32"
-                },
+                    "name": "amount",
+                    "type": "asset"
+                }
+            ]
+        },
+        {
+            "name": "cnftdrop",
+            "base": "",
+            "fields": [
                 {
                     "name": "format",
                     "type": "string"
@@ -98,6 +122,14 @@
                     "type": "uint64"
                 },
                 {
+                    "name": "changeprice",
+                    "type": "int32"
+                },
+                {
+                    "name": "changepricetime",
+                    "type": "int32"
+                },
+                {
                     "name": "img",
                     "type": "string"
                 },
@@ -114,7 +146,12 @@
         {
             "name": "config",
             "base": "",
-            "fields": []
+            "fields": [
+                {
+                    "name": "min_price",
+                    "type": "asset"
+                }
+            ]
         },
         {
             "name": "ctokendrop",
@@ -137,14 +174,6 @@
                     "type": "name"
                 },
                 {
-                    "name": "changeprice",
-                    "type": "int32"
-                },
-                {
-                    "name": "changepricetime",
-                    "type": "int32"
-                },
-                {
                     "name": "maxbuy_tx",
                     "type": "int32"
                 },
@@ -158,6 +187,14 @@
                 },
                 {
                     "name": "supply",
+                    "type": "asset"
+                },
+                {
+                    "name": "changeprice",
+                    "type": "int32"
+                },
+                {
+                    "name": "changepricetime",
                     "type": "int32"
                 },
                 {
@@ -219,7 +256,15 @@
                     "type": "asset"
                 },
                 {
-                    "name": "changepricetime",
+                    "name": "supply",
+                    "type": "int32"
+                },
+                {
+                    "name": "maxsupply",
+                    "type": "int32"
+                },
+                {
+                    "name": "buy",
                     "type": "int32"
                 },
                 {
@@ -227,11 +272,7 @@
                     "type": "int32"
                 },
                 {
-                    "name": "supply",
-                    "type": "int32"
-                },
-                {
-                    "name": "maxsupply",
+                    "name": "changepricetime",
                     "type": "int32"
                 },
                 {
@@ -271,6 +312,10 @@
                 {
                     "name": "dropnum",
                     "type": "int32"
+                },
+                {
+                    "name": "min_price",
+                    "type": "asset"
                 }
             ]
         },
@@ -309,19 +354,19 @@
             ]
         },
         {
-            "name": "setchangepr",
+            "name": "sendtoken",
             "base": "",
             "fields": [
+                {
+                    "name": "username",
+                    "type": "name"
+                },
                 {
                     "name": "drop_id",
                     "type": "int32"
                 },
                 {
-                    "name": "changeprice",
-                    "type": "int32"
-                },
-                {
-                    "name": "changepricetime",
+                    "name": "num",
                     "type": "int32"
                 }
             ]
@@ -409,6 +454,20 @@
             ]
         },
         {
+            "name": "testtable",
+            "base": "",
+            "fields": [
+                {
+                    "name": "username",
+                    "type": "name"
+                },
+                {
+                    "name": "token_ticker",
+                    "type": "TOKEN_TICKER[]"
+                }
+            ]
+        },
+        {
             "name": "tokendrop",
             "base": "",
             "fields": [
@@ -421,6 +480,10 @@
                     "type": "name"
                 },
                 {
+                    "name": "contract_adress",
+                    "type": "name"
+                },
+                {
                     "name": "collection",
                     "type": "name"
                 },
@@ -429,19 +492,11 @@
                     "type": "string"
                 },
                 {
-                    "name": "contract_adress",
-                    "type": "name"
-                },
-                {
-                    "name": "changeprice",
-                    "type": "int32"
-                },
-                {
-                    "name": "changepricetime",
-                    "type": "int32"
-                },
-                {
                     "name": "maxbuy_tx",
+                    "type": "int32"
+                },
+                {
+                    "name": "buy",
                     "type": "int32"
                 },
                 {
@@ -458,10 +513,18 @@
                 },
                 {
                     "name": "supply",
-                    "type": "int32"
+                    "type": "asset"
                 },
                 {
                     "name": "maxsupply",
+                    "type": "asset"
+                },
+                {
+                    "name": "changeprice",
+                    "type": "int32"
+                },
+                {
+                    "name": "changepricetime",
                     "type": "int32"
                 },
                 {
@@ -526,6 +589,11 @@
             "ricardian_contract": ""
         },
         {
+            "name": "claimtdrop",
+            "type": "claimtdrop",
+            "ricardian_contract": ""
+        },
+        {
             "name": "cnftdrop",
             "type": "cnftdrop",
             "ricardian_contract": ""
@@ -551,9 +619,9 @@
             "ricardian_contract": "Acceptance of the auction agreement"
         },
         {
-            "name": "setchangepr",
-            "type": "setchangepr",
-            "ricardian_contract": "Setting the percentage of change in price and time of change"
+            "name": "sendtoken",
+            "type": "sendtoken",
+            "ricardian_contract": ""
         },
         {
             "name": "setdroptime",
@@ -583,14 +651,14 @@
     ],
     "tables": [
         {
-            "name": "config",
+            "name": "configg",
             "type": "dropconfig",
             "index_type": "i64",
             "key_names": [],
             "key_types": []
         },
         {
-            "name": "dropsssl",
+            "name": "nftdrop",
             "type": "drop",
             "index_type": "i64",
             "key_names": [],
@@ -604,7 +672,14 @@
             "key_types": []
         },
         {
-            "name": "tokendrops",
+            "name": "test",
+            "type": "testtable",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        },
+        {
+            "name": "tokendrop",
             "type": "tokendrop",
             "index_type": "i64",
             "key_names": [],

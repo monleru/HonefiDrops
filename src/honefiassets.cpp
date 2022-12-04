@@ -1,40 +1,8 @@
 #include <honefiassets.hpp>
 
-  ACTION honefiassets::cnftdrop(int changeprice,int changepricetime, string format, name username, name collection, name shemas, uint32_t templates, asset price, int supply, uint64_t dropstart, uint64_t dropend, string img,string drop_name, string description){
-  require_auth(username);
-  check ( format == "balancer" || format == "dutch", "Invalid forman");
-  atomicassets::collections_t  collections  = atomicassets::collections_t(atomicassets::ATOMICASSETS_ACCOUNT, atomicassets::ATOMICASSETS_ACCOUNT.value);
-  auto collection_itr = collections.require_find(collection.value);
-  check ( collection_itr->author == username, "Error auth collection");
-  // drop num table find
-  auto now = current_time_point().sec_since_epoch();
-  check ( now < dropstart, "The beggining connot be earlier than the current time" );
-  // Create drop
-  auto itr_dropnum = config_table.find(get_self().value);
-  drop_table.emplace(username, [&](auto& row) {
-    row.dropnum = itr_dropnum->dropnum + 1;
-    row.format = format;
-    row.username = username;
-    row.collection = collection;
-    row.shemas = shemas;
-    row.templates = templates;
-    row.startprice = asset{price.amount, price.symbol};
-    row.price = asset{price.amount, price.symbol};
-    row.changeprice = changeprice;
-    row.changepricetime = changepricetime;
-    row.maxsupply = supply;
-    row.dropstart = dropstart;
-    row.dropend = dropend;
-    row.lastbuy = dropstart;
-    row.img = img;
-    row.drop_name = drop_name;
-    row.description = description;
-  });
-  // drop num number + 1
-  config_table.modify(itr_dropnum, username, [&](auto& row) {
-  row.dropnum += 1;
-  });
-}
+#include "nftdrop.cpp"
+#include "tokendrop.cpp"
+
 // registration new user
 ACTION honefiassets::newuser(name username){
   require_auth(username);
@@ -56,7 +24,7 @@ ACTION honefiassets::setslip(name username, float slip){
   });
 }
 
-void honefiassets::token_transfer(name from,name to, asset quantity, string memo){
+void honefiassets::deposit_token(name from,name to, asset quantity, string memo){
   // auth user
   require_auth(from);
   // check transfer wallet
@@ -85,108 +53,16 @@ ACTION honefiassets::dropremove(int drop_id){
   itr_drop = drop_table.erase(itr_drop);
 }
 //set config
-ACTION honefiassets::config(){
+ACTION honefiassets::config(asset min_price){
   require_auth(get_self());
   config_table.emplace(get_self(), [&](auto& row) {
     row.username = get_self();
     row.dropnum = 0;
+    row.min_price = min_price;
   });
 }
 //mint
-ACTION honefiassets::claimdrop ( name claimer, int drop_id, int claim_amount ){
-  require_auth(claimer);
-  auto itr_user = users_config.find(claimer.value);
-  check ( itr_user != users_config.end(), "Error");
-  asset quantity = itr_user->balance;
-  //find drop table
-  auto itr = drop_table.find(drop_id);
-  // check drop in drop table
-  check ( itr != drop_table.end(), "Invalid drop");
-  // time
-  auto itr_rambalance = _rambalance.find(itr->collection.value);
-  check ( itr_rambalance->bytes >= 151, "The collection has no ram");
-  check ( itr_rambalance != _rambalance.end(), "The collection has no ram");
-  _rambalance.modify(itr_rambalance, claimer, [&](auto& row) {
-    row.bytes -= 151;
-  });
-  uint64_t now = current_time_point().sec_since_epoch();
-  // check drop start
-  check( now >= itr->dropstart,"Drop didn't start");
-  //check end drop
-  if ( itr->dropend != 0 ) {
-    check ( now <= itr->dropend, "Drop ended");
-  }
-  check ( itr->supply < itr->maxsupply, "The nfts is over");
-  if ( itr->format == "balancer") {
-    // Balance pool formula
-    float sss = 100;
-    float pricec = 1 - itr->changeprice/sss;
-    pricec = pow(pricec, floor((now - itr->lastbuy)/itr->changepricetime));
-    float price_now = itr->price.amount*pricec;
-    if ( price_now < 0.01 ) {
-      price_now = 0.01000000;
-    }
-    // check token quality
-    if (quantity.amount > price_now){
-      // mint function
-      // mint data
-      vector<name> data;
-      //mint nft
-      action{
-        permission_level{get_self(), "active"_n},
-        "atomicassets"_n,
-        "mintasset"_n,
-        std::make_tuple(get_self(),itr->collection, itr->shemas, itr->templates, claimer, data, data, data)
-      }.send();
-      // Return slippage
-      users_config.modify(itr_user, claimer, [&](auto& row) {
-        row.balance.amount -= price_now;
-      });
-      // new price and new lastbuy time point
-      drop_table.modify(itr, get_self(), [&](auto& row) {
-        row.price.amount = price_now + (price_now / sss)*itr->changeprice;
-        row.lastbuy = current_time_point().sec_since_epoch();
-        row.supply += 1;
-      });
-      // send wax to creator drop
-      quantity.amount = price_now;
-      in_contract_transfer(itr->username, quantity); 
-    }
-    else check(false, "You don't have enough founds");
-  }
-  else if ( itr->format == "datch" ) {
-    // Calculating the price
-    float checkprice = (now - itr->dropstart)/itr->changepricetime;
-    int price_now = floor(itr->startprice.amount - (itr->startprice.amount/100*floor(checkprice))*itr->changeprice);
-    asset price__now = itr->startprice;
-    // check the price, if the price os less than 0, we leave it at 0.
-    if ( itr->startprice.amount - price_now > 0 ) {
-      price__now.amount = itr->startprice.amount - price_now;
-    }
-    else {
-      price__now.amount = 0;
-    }
-    // check payment founds
-    check ( quantity.amount == price__now.amount , "You don't have enough founds");
-    // mint data
-    vector<name> data;
-    //mint nft
-    action{
-      permission_level{get_self(), "active"_n},
-      "atomicassets"_n,
-      "mintasset"_n,
-      std::make_tuple(get_self(),itr->collection, itr->shemas, itr->templates, claimer, data, data, data)
-    }.send();
-    // change number of purchases
-    drop_table.modify(itr, get_self(), [&](auto& row) {
-      row.supply += 1;
-    });
-    // sending funds to the creator of the drop
-    in_contract_transfer(itr->username, quantity); 
 
-
-  }
-}
 // transfer tokens
 void honefiassets::in_contract_transfer(name username, asset quantity){
   string memo;
@@ -233,15 +109,6 @@ ACTION honefiassets::setsupply( int drop_id, int supply){
     row.maxsupply = supply;
   });
 }
-// set change prices
-ACTION honefiassets::setchangepr( int drop_id, int changeprice,int changepricetime){
-  auto itr_drop = drop_table.find(drop_id);
-  require_auth(itr_drop->username);
-  drop_table.modify(itr_drop, get_self(), [&](auto& row) {
-    row.changeprice = changeprice;
-    row.changepricetime = changepricetime;
-  });
-}
 ACTION honefiassets::buyram( name username, name collection,  asset quant ) {
   require_auth(username);
   auto itr_user = users_config.find(username.value);
@@ -261,50 +128,3 @@ ACTION honefiassets::claimbalance( name username ){
     row.balance.amount = 0;
   });
 }
-ACTION honefiassets::ctokendrop(
-  name username, 
-  name collection,
-  string tokenticker,
-  name contract_adress,
-  int changeprice,
-  int changepricetime, 
-  int maxbuy_tx,
-  string format,
-  asset price, 
-  int supply, 
-  uint64_t dropstart, 
-  uint64_t dropend, 
-  string img,
-  string drop_name, 
-  string description){
-  require_auth(username);
-  check ( format == "balancer" || format == "dutch", "Invalid forman");
-    auto now = current_time_point().sec_since_epoch();
-  check ( now < dropstart, "The beggining connot be earlier than the current time" );
-  // Create drop
-  auto itr_dropnum = config_table.find(get_self().value);
-  _tokendrop.emplace(username, [&](auto& row) {
-    row.dropnum = itr_dropnum->dropnum + 1;
-    row.format = format;
-    row.username = username;
-    row.collection = collection;
-    row.tokenticker = tokenticker;
-    row.contract_adress = contract_adress;
-    row.maxbuy_tx = maxbuy_tx;
-    row.startprice = asset{price.amount, price.symbol};
-    row.price = asset{price.amount, price.symbol};
-    row.changeprice = changeprice;
-    row.changepricetime = changepricetime;
-    row.maxsupply = supply;
-    row.dropstart = dropstart;
-    row.dropend = dropend;
-    row.lastbuy = dropstart;
-    row.img = img;
-    row.drop_name = drop_name;
-    row.description = description;
-  });
-  // drop num number + 1
-  config_table.modify(itr_dropnum, username, [&](auto& row) {
-  row.dropnum += 1;
-  });
-  }
