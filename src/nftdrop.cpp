@@ -16,19 +16,28 @@ ACTION honefiassets::cnftdrop(
       string img,
       string drop_name,
       string description){
+
   require_auth(username);
+
   check ( format == "balance" || format == "datch", "Invalid forman");
   check ( dropend <= 480 && dropend > 5, "Invalid dropend time");
+
   if ( format == "datch" ) {
     check( changeprice > 0 && changeprice <= 10, "Invalid 'changeprice' options");
     check( changepricetime >= 30, "Invalid 'changepricetime' options");
   }
+
+
   atomicassets::collections_t  collections  = atomicassets::collections_t(atomicassets::ATOMICASSETS_ACCOUNT, atomicassets::ATOMICASSETS_ACCOUNT.value);
   auto collection_itr = collections.require_find(collection.value);
   check ( collection_itr->author == username, "Error auth collection");
+
   // drop num table find
+
   auto now = current_time_point().sec_since_epoch();
-  check ( now < dropstart, "The beggining connot be earlier than the current time" );
+
+  check ( now < dropstart, "Drop cannot be started before the current time" );
+
   // Create drop
   auto itr_dropnum = config_table.find(get_self().value);
   drop_table.emplace(username, [&](auto& row) {
@@ -50,6 +59,7 @@ ACTION honefiassets::cnftdrop(
     row.drop_name = drop_name;
     row.description = description;
   });
+
   // drop num number + 1
   config_table.modify(itr_dropnum, username, [&](auto& row) {
   row.dropnum += 1;
@@ -85,8 +95,10 @@ ACTION honefiassets::claimdrop ( name claimer, int drop_id, int claim_amount ){
   //check end drop
   check ( now <= itr->dropend, "Drop ended");
   // check Supply
-  check ( itr->supply < itr->maxsupply, "The nfts is over");
+  check ( itr->supply < itr->maxsupply, "No nft’s available for purchase");
   auto config_ = config_table.find(get_self().value);
+
+
   if ( itr->format == "balance") {
     // Balance pool formula
     float sss = 100;
@@ -102,7 +114,7 @@ ACTION honefiassets::claimdrop ( name claimer, int drop_id, int claim_amount ){
             price_now = config_->min_price.amount;
         } 
     }
-    // check token quality
+    // check token quantity
     if (quantity.amount > price_now){
       // mint function
       // mint data
@@ -134,19 +146,21 @@ ACTION honefiassets::claimdrop ( name claimer, int drop_id, int claim_amount ){
             row.buy += 1;
         });
       }
-      // send wax to creator drop
+      // Send WAX to the creator
       quantity.amount = price_now;
       in_contract_transfer(itr->username, quantity); 
     }
-    else check(false, "You don't have enough founds");
+    else check(false, "You don't have enough funds");
   }
+
+
   else if ( itr->format == "datch" ) {
     // Calculating the price
     int checkprice = floor((now - itr->dropstart)/itr->changepricetime);
     asset price_now = itr->startprice;
     price_now.amount = itr->startprice.amount - (itr->startprice.amount/100*checkprice)*itr->changeprice;
     asset price__now = itr->startprice;
-    // check the price, if the price os less than 0, we leave it at 0.
+    // check the price, if the price is less than 0, we leave it at 0.
     if ( price_now.amount > config_->min_price.amount ) {
       price__now.amount = price_now.amount;
     }
@@ -174,4 +188,5 @@ ACTION honefiassets::claimdrop ( name claimer, int drop_id, int claim_amount ){
     // sending funds to the creator of the drop
     in_contract_transfer(itr->username, price__now);
   }
+  
 }

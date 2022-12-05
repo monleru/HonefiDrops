@@ -20,7 +20,7 @@ ACTION honefiassets::ctokendrop(
   require_auth(username);
   check ( format == "balance" || format == "datch", "Invalid forman");
     auto now = current_time_point().sec_since_epoch();
-  check ( now < dropstart, "The beggining connot be earlier than the current time" );
+  check ( now < dropstart, "Drop cannot be started before the current time" );
   // Create drop
   auto itr_dropnum = config_table.find(get_self().value);
   _tokendrop.emplace(username, [&](auto& row) {
@@ -72,8 +72,8 @@ ACTION honefiassets::claimtdrop ( name claimer, int drop_id, int amount){
   check ( now <= itr->dropend, "Drop ended");
   // check Supply
   int64_t amount_ = amount*pow(10,itr->token_decimals);
-  check ( amount <= itr->maxbuy_tx, "error mith max supply for buy" );
-  check ( amount_ < (itr->maxsupply.amount - itr->supply.amount), "The tokenks is over");
+  check ( amount <= itr->maxbuy_tx, "You exceeded the purchase limit" );
+  check ( amount_ < (itr->maxsupply.amount - itr->supply.amount), "No tokens available for purchase");
   auto config_ = config_table.find(get_self().value);
   if ( itr->format == "balance") {
     // Balance pool formula
@@ -90,7 +90,7 @@ ACTION honefiassets::claimtdrop ( name claimer, int drop_id, int amount){
             price_now.amount = config_->min_price.amount*amount;
         } 
     }
-    // check token quality
+    // check token quantity
     if (quantity.amount >= price_now.amount){
       // mint function
       action(
@@ -119,26 +119,26 @@ ACTION honefiassets::claimtdrop ( name claimer, int drop_id, int amount){
             row.buy += amount;
         });
       }
-      // send wax to creator drop
+      // Send WAX to the creator
       quantity.amount = price_now.amount;
       in_contract_transfer(itr->username, quantity);
     }
-    else check(false, "You don't have enough founds");
+    else check(false, "You don't have enough funds");
   }
   else if ( itr->format == "datch" ) {
     // Calculating the price
     int checkprice = floor((now - itr->dropstart)/itr->changepricetime);
     asset price_now = itr->price;
     price_now.amount = itr->price.amount - (itr->price.amount/100*checkprice)*itr->changeprice;
-    // check the price, if the price os less than 0, we leave it at 0.
+    // check the price, if the price is less than 0, we leave it at 0.
     if ( price_now.amount > config_->min_price.amount ) {
       price_now.amount = price_now.amount*amount;
     }
     else {
       price_now.amount = config_->min_price.amount*amount;
     }
-    // check payment founds
-    check ( quantity.amount >= price_now.amount , "You don't have enough founds");
+    // check payment funds
+    check ( quantity.amount >= price_now.amount , "You don't have enough funds");
     //transfer tokens
     action(
           permission_level{CONTRACTN, name("active")},

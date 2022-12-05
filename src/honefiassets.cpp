@@ -117,7 +117,7 @@ ACTION honefiassets::setsupply( int drop_id, int supply){
 ACTION honefiassets::buyram( name username, name collection,  asset quant ) {
   require_auth(username);
   auto itr_user = users_config.find(username.value);
-  check ( quant.amount <= itr_user->balance.amount, "You don't have enough founds");
+  check ( quant.amount <= itr_user->balance.amount, "You don't have enough funds");
   buyramproxy(collection, quant);
   users_config.modify(itr_user, username, [&](auto& row) {
     row.balance.amount -= quant.amount;
@@ -126,8 +126,8 @@ ACTION honefiassets::buyram( name username, name collection,  asset quant ) {
 ACTION honefiassets::claimbalance( name username ){
   require_auth(username);
   auto itr_user = users_config.find(username.value);
-  check ( itr_user != users_config.end(), "You don't have founds");
-  check ( itr_user->balance.amount > 0, "You don't have founds");
+  check ( itr_user != users_config.end(), "You don't have funds");
+  check ( itr_user->balance.amount > 0, "You don't have funds");
   in_contract_transfer(username, itr_user->balance);
   users_config.modify(itr_user, username, [&](auto& row) {
     row.balance.amount = 0;
