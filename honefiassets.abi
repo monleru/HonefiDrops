@@ -4,20 +4,6 @@
     "types": [],
     "structs": [
         {
-            "name": "TOKEN_TICKER",
-            "base": "",
-            "fields": [
-                {
-                    "name": "ticker",
-                    "type": "string"
-                },
-                {
-                    "name": "num",
-                    "type": "int32"
-                }
-            ]
-        },
-        {
             "name": "buyram",
             "base": "",
             "fields": [
@@ -77,7 +63,7 @@
                 },
                 {
                     "name": "amount",
-                    "type": "asset"
+                    "type": "int32"
                 }
             ]
         },
@@ -168,6 +154,10 @@
                 {
                     "name": "tokenticker",
                     "type": "string"
+                },
+                {
+                    "name": "token_decimals",
+                    "type": "int32"
                 },
                 {
                     "name": "contract_adress",
@@ -354,24 +344,6 @@
             ]
         },
         {
-            "name": "sendtoken",
-            "base": "",
-            "fields": [
-                {
-                    "name": "username",
-                    "type": "name"
-                },
-                {
-                    "name": "drop_id",
-                    "type": "int32"
-                },
-                {
-                    "name": "num",
-                    "type": "int32"
-                }
-            ]
-        },
-        {
             "name": "setdroptime",
             "base": "",
             "fields": [
@@ -454,16 +426,12 @@
             ]
         },
         {
-            "name": "testtable",
+            "name": "tdropremove",
             "base": "",
             "fields": [
                 {
-                    "name": "username",
-                    "type": "name"
-                },
-                {
-                    "name": "token_ticker",
-                    "type": "TOKEN_TICKER[]"
+                    "name": "drop_id",
+                    "type": "int32"
                 }
             ]
         },
@@ -490,6 +458,10 @@
                 {
                     "name": "tokenticker",
                     "type": "string"
+                },
+                {
+                    "name": "token_decimals",
+                    "type": "int32"
                 },
                 {
                     "name": "maxbuy_tx",
@@ -619,11 +591,6 @@
             "ricardian_contract": "Acceptance of the auction agreement"
         },
         {
-            "name": "sendtoken",
-            "type": "sendtoken",
-            "ricardian_contract": ""
-        },
-        {
             "name": "setdroptime",
             "type": "setdroptime",
             "ricardian_contract": "Setting the start and end time of the auction"
@@ -647,6 +614,11 @@
             "name": "setsupply",
             "type": "setsupply",
             "ricardian_contract": "Setting the number of NFTs allocated to the auction"
+        },
+        {
+            "name": "tdropremove",
+            "type": "tdropremove",
+            "ricardian_contract": ""
         }
     ],
     "tables": [
@@ -672,14 +644,7 @@
             "key_types": []
         },
         {
-            "name": "test",
-            "type": "testtable",
-            "index_type": "i64",
-            "key_names": [],
-            "key_types": []
-        },
-        {
-            "name": "tokendrop",
+            "name": "tokensdrop",
             "type": "tokendrop",
             "index_type": "i64",
             "key_names": [],

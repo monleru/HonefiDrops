@@ -67,7 +67,7 @@ ACTION honefiassets::claimdrop ( name claimer, int drop_id, int claim_amount ){
   //find drop table
   auto itr = drop_table.find(drop_id);
   // check drop in drop table
-  // check ( itr != drop_table.end(), "Invalid drop");
+  check ( itr != drop_table.end(), "Invalid drop");
 
 
   // check ram balance

@@ -28,8 +28,7 @@ CONTRACT honefiassets : public contract {
         users_config(receiver, receiver.value),
         _rambalance(receiver,receiver.value),
         _rammarket(EOSIO, EOSIO.value),
-        _tokendrop(receiver, receiver.value),
-        _testtable(receiver, receiver.value){}
+        _tokendrop(receiver, receiver.value){}
     // registration user
       ACTION cnftdrop(
         string format, 
@@ -51,20 +50,21 @@ CONTRACT honefiassets : public contract {
       ACTION newuser(name username);
       ACTION setslip(name username, float slip);
       ACTION dropremove(int drop_id);
+      ACTION tdropremove(int drop_id);
       ACTION config(asset min_price);
       ACTION setdroptime(int drop_id, uint64_t dropstart, uint64_t dropend);
       ACTION setprice(int drop_id, asset price);
       ACTION setinfo(int drop_id, string img, string drop_name, string description);
       ACTION setsupply( int drop_id, int supply);
       ACTION claimdrop ( name claimer, int drop_id, int claim_amount );
-      ACTION claimtdrop ( name claimer, int drop_id, asset amount);
+      ACTION claimtdrop ( name claimer, int drop_id, int amount);
       ACTION buyram( name username, name collection,  asset quant );
       ACTION claimbalance( name username );
-      ACTION sendtoken(name username, vector<name> token_ticker_);  
       ACTION ctokendrop(
         name username, 
         name collection,
         string tokenticker,
+        int token_decimals,
         name contract_adress,
         int maxbuy_tx,
         string format,
@@ -79,16 +79,13 @@ CONTRACT honefiassets : public contract {
         string description);
 
   private:
-    struct TOKEN_TICKER {
-        string ticker;
-        int num;
-    };
     TABLE tokendrop {
       int dropnum;
       name username;
       name contract_adress;
       name collection;
       string tokenticker;
+      int token_decimals;
       int maxbuy_tx;
       int buy;
       string format;
@@ -107,7 +104,7 @@ CONTRACT honefiassets : public contract {
 
       auto primary_key() const { return dropnum; }
     };
-    typedef multi_index<name("tokendrop"), tokendrop> tokendrops;
+    typedef multi_index<name("tokensdrop"), tokendrop> tokendrops;
     tokendrops _tokendrop;
     //Connector
     struct connector_item
@@ -175,13 +172,7 @@ CONTRACT honefiassets : public contract {
         };
         typedef multi_index<name("configg"), dropconfig> configs;
         configs config_table;
-     TABLE testtable {
-          name username;
-          vector<TOKEN_TICKER> token_ticker;
-          auto primary_key() const { return username.value; }
-        };
-        typedef multi_index<name("test"), testtable> testtables;
-        testtables _testtable;
+
     void in_contract_claim(name username, int drop_id, asset quantity);
     void in_contract_transfer(name username, asset quantity);
     void buyramproxy(name collection, asset quantity){

@@ -52,6 +52,11 @@ ACTION honefiassets::dropremove(int drop_id){
   require_auth(itr_drop->username);
   itr_drop = drop_table.erase(itr_drop);
 }
+ACTION honefiassets::tdropremove(int drop_id){
+  auto itr_drop = _tokendrop.find(drop_id);
+  require_auth(itr_drop->username);
+  itr_drop = _tokendrop.erase(itr_drop);
+}
 //set config
 ACTION honefiassets::config(asset min_price){
   require_auth(get_self());
