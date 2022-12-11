@@ -6,7 +6,7 @@ For convenient activity monitoring, we have made a navigation of all currently s
 
 ## 📜 List of Deliverables
 
-1. [Auction Platform]().
+1. [Auction Platform](#auction-platform).
 2. [LaunchPool Platform](#launchpool-platform).
 3. [Backend Development]().
 4. [Final Stage]().
