@@ -216,6 +216,12 @@ Technical details:
 | username  | name | WAX Wallet |
 | dropnum  | int32  | ID of LaunchPool |
 
+>**claimwax** - action to claim WAXP for the creator.
+
+| Field Name  | Type  | Description |
+|---|---|---|
+| username  | name | WAX Wallet |
+| dropnum  | int32  | ID of LaunchPool |
 #### Developing an Backend for data storage
 
 We have developed a handy backend for the HoneFi platform to store a lot of information about current drops. The main advantage:
