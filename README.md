@@ -6,8 +6,8 @@ For convenient activity monitoring, we have made a navigation of all currently s
 
 ## 📜 List of Deliverables
 
-1. [Auction Platform]().
-2. [LaunchPool Platform]().
+1. [Auction Platform](#auction-platform).
+2. [LaunchPool Platform](#launchpool-platform).
 3. [Backend Development]().
 4. [Final Stage]().
 
@@ -216,6 +216,12 @@ Technical details:
 | username  | name | WAX Wallet |
 | dropnum  | int32  | ID of LaunchPool |
 
+>**claimwax** - action to claim WAXP for the creator.
+
+| Field Name  | Type  | Description |
+|---|---|---|
+| username  | name | WAX Wallet |
+| dropnum  | int32  | ID of LaunchPool |
 #### Developing an Backend for data storage
 
 We have developed a handy backend for the HoneFi platform to store a lot of information about current drops. The main advantage:

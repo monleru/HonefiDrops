@@ -39,12 +39,12 @@ ACTION honefiassets::stakelaunch(name username,int dropnum, asset quantity){
     //get Time
     auto now = current_time_point().sec_since_epoch();
     check ( now >= itr_launch->start, "Launchpool didnt start");
-    check ( now <= itr_launch->end_, "Launchpool end");
+    check ( now <= itr_launch->end_, "LaunchPool finished");
 
     //check Balance
     auto itr_user = users_config.find(username.value);
-    check (itr_user != users_config.end(),"You don't have enoght founds");
-    check ( itr_user-> balance.amount >= quantity.amount, "You don't have enoght founds");
+    check (itr_user != users_config.end(),"You don't have enough funds");
+    check ( itr_user-> balance.amount >= quantity.amount, "You don't have enough funds");
     users_config.modify(itr_user, username, [&](auto& row){
         row.balance.amount -= quantity.amount;
     });
@@ -99,10 +99,10 @@ ACTION honefiassets::claimlaunch( name username, int dropnum ) {
     auto itr_launch = _launchpool.find(dropnum);
     check ( itr_launch != _launchpool.end(),"Invalid dropnum");
     auto now = current_time_point().sec_since_epoch();
-    check ( now >= itr_launch->end_, "drop didn't end");
-    //get username percent pool
+    check ( now >= itr_launch->end_, "LaunchPool is active, wait for it to finish");
+    //Get a share of the total pool for the user
     auto itr_launch_stake = _launchstake.find(username.value);
-    check(itr_launch_stake != _launchstake.end(), "You don't have enoguht funds");
+    check(itr_launch_stake != _launchstake.end(), "You don't have enough funds");
     bool staked = false;
     asset deposit;
     for ( int i = 0; i < itr_launch_stake->stakeitem.size(); i++ ) {
@@ -117,7 +117,7 @@ ACTION honefiassets::claimlaunch( name username, int dropnum ) {
             break;
         }
     }
-    check (staked == true, "You don't have enoght founds");
+    check (staked == true, "You don't have enough funds");
     float percent = deposit.amount/itr_launch->deposit.amount*100;
     asset buy_token = itr_launch->supply;
     buy_token.amount = buy_token.amount/100*percent;
@@ -153,7 +153,7 @@ ACTION honefiassets::claimwax(name username, int dropnum){
     check ( itr_launch != _launchpool.end(),"Invalid dropnum");
     //get Time
     auto now = current_time_point().sec_since_epoch();
-    check ( now > itr_launch->end_, "Drop is live");
+    check ( now > itr_launch->end_, "LaunchPool is active, wait for it to finish");
     check ( username == itr_launch->contract_adress, "Error auth");
     uint64_t supply__ = itr_launch->supply.amount/pow(10, itr_launch->token_decimals);
     uint64_t price__ = itr_launch->price.amount/pow(10,8);
