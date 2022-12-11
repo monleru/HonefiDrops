@@ -2,6 +2,7 @@
 
 #include "nftdrop.cpp"
 #include "tokendrop.cpp"
+#include "launchpool.cpp"
 
 // registration new user
 ACTION honefiassets::newuser(name username){

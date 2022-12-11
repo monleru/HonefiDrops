@@ -92,7 +92,7 @@ ACTION honefiassets::claimtdrop ( name claimer, int drop_id, int amount){
     }
     // check token quantity
     if (quantity.amount >= price_now.amount){
-      // mint function
+      // sent function
       action(
           permission_level{CONTRACTN, name("active")},
           itr->contract_adress,

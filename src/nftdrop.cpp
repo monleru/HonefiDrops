@@ -62,7 +62,7 @@ ACTION honefiassets::cnftdrop(
 
   // drop num number + 1
   config_table.modify(itr_dropnum, username, [&](auto& row) {
-  row.dropnum += 1;
+    row.dropnum += 1;
   });
 }
 

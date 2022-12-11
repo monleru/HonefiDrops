@@ -4,6 +4,20 @@
     "types": [],
     "structs": [
         {
+            "name": "_stakeitem",
+            "base": "",
+            "fields": [
+                {
+                    "name": "balance",
+                    "type": "asset"
+                },
+                {
+                    "name": "dropnum",
+                    "type": "int32"
+                }
+            ]
+        },
+        {
             "name": "buyram",
             "base": "",
             "fields": [
@@ -50,6 +64,20 @@
             ]
         },
         {
+            "name": "claimlaunch",
+            "base": "",
+            "fields": [
+                {
+                    "name": "username",
+                    "type": "name"
+                },
+                {
+                    "name": "dropnum",
+                    "type": "int32"
+                }
+            ]
+        },
+        {
             "name": "claimtdrop",
             "base": "",
             "fields": [
@@ -63,6 +91,20 @@
                 },
                 {
                     "name": "amount",
+                    "type": "int32"
+                }
+            ]
+        },
+        {
+            "name": "claimwax",
+            "base": "",
+            "fields": [
+                {
+                    "name": "username",
+                    "type": "name"
+                },
+                {
+                    "name": "dropnum",
                     "type": "int32"
                 }
             ]
@@ -136,6 +178,44 @@
                 {
                     "name": "min_price",
                     "type": "asset"
+                }
+            ]
+        },
+        {
+            "name": "createlpool",
+            "base": "",
+            "fields": [
+                {
+                    "name": "contract_adress",
+                    "type": "name"
+                },
+                {
+                    "name": "supply",
+                    "type": "asset"
+                },
+                {
+                    "name": "price",
+                    "type": "asset"
+                },
+                {
+                    "name": "deposit",
+                    "type": "asset"
+                },
+                {
+                    "name": "token_decimals",
+                    "type": "int32"
+                },
+                {
+                    "name": "start",
+                    "type": "uint64"
+                },
+                {
+                    "name": "end_",
+                    "type": "uint64"
+                },
+                {
+                    "name": "token_ticker",
+                    "type": "string"
                 }
             ]
         },
@@ -320,6 +400,66 @@
             ]
         },
         {
+            "name": "launchpool",
+            "base": "",
+            "fields": [
+                {
+                    "name": "dropnum",
+                    "type": "int32"
+                },
+                {
+                    "name": "contract_adress",
+                    "type": "name"
+                },
+                {
+                    "name": "supply",
+                    "type": "asset"
+                },
+                {
+                    "name": "price",
+                    "type": "asset"
+                },
+                {
+                    "name": "deposit",
+                    "type": "asset"
+                },
+                {
+                    "name": "start",
+                    "type": "uint64"
+                },
+                {
+                    "name": "token_decimals",
+                    "type": "int32"
+                },
+                {
+                    "name": "end_",
+                    "type": "uint64"
+                },
+                {
+                    "name": "token_ticker",
+                    "type": "string"
+                },
+                {
+                    "name": "approve",
+                    "type": "bool"
+                }
+            ]
+        },
+        {
+            "name": "launchstake",
+            "base": "",
+            "fields": [
+                {
+                    "name": "username",
+                    "type": "name"
+                },
+                {
+                    "name": "stakeitem",
+                    "type": "_stakeitem[]"
+                }
+            ]
+        },
+        {
             "name": "newuser",
             "base": "",
             "fields": [
@@ -422,6 +562,24 @@
                 {
                     "name": "supply",
                     "type": "int32"
+                }
+            ]
+        },
+        {
+            "name": "stakelaunch",
+            "base": "",
+            "fields": [
+                {
+                    "name": "username",
+                    "type": "name"
+                },
+                {
+                    "name": "dropnum",
+                    "type": "int32"
+                },
+                {
+                    "name": "quantity",
+                    "type": "asset"
                 }
             ]
         },
@@ -561,8 +719,18 @@
             "ricardian_contract": ""
         },
         {
+            "name": "claimlaunch",
+            "type": "claimlaunch",
+            "ricardian_contract": ""
+        },
+        {
             "name": "claimtdrop",
             "type": "claimtdrop",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "claimwax",
+            "type": "claimwax",
             "ricardian_contract": ""
         },
         {
@@ -574,6 +742,11 @@
             "name": "config",
             "type": "config",
             "ricardian_contract": "Administrative function"
+        },
+        {
+            "name": "createlpool",
+            "type": "createlpool",
+            "ricardian_contract": ""
         },
         {
             "name": "ctokendrop",
@@ -616,6 +789,11 @@
             "ricardian_contract": "Setting the number of NFTs allocated to the auction"
         },
         {
+            "name": "stakelaunch",
+            "type": "stakelaunch",
+            "ricardian_contract": ""
+        },
+        {
             "name": "tdropremove",
             "type": "tdropremove",
             "ricardian_contract": ""
@@ -625,6 +803,20 @@
         {
             "name": "configg",
             "type": "dropconfig",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        },
+        {
+            "name": "launchpool",
+            "type": "launchpool",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        },
+        {
+            "name": "launchstake",
+            "type": "launchstake",
             "index_type": "i64",
             "key_names": [],
             "key_types": []

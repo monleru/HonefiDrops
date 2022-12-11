@@ -28,7 +28,9 @@ CONTRACT honefiassets : public contract {
         users_config(receiver, receiver.value),
         _rambalance(receiver,receiver.value),
         _rammarket(EOSIO, EOSIO.value),
-        _tokendrop(receiver, receiver.value){}
+        _tokendrop(receiver, receiver.value),
+        _launchpool(receiver, receiver.value),
+        _launchstake(receiver,receiver.value){}
     // registration user
       ACTION cnftdrop(
         string format, 
@@ -60,6 +62,9 @@ CONTRACT honefiassets : public contract {
       ACTION claimtdrop ( name claimer, int drop_id, int amount);
       ACTION buyram( name username, name collection,  asset quant );
       ACTION claimbalance( name username );
+      ACTION stakelaunch(name username,int dropnum, asset quantity);
+      ACTION claimlaunch( name username, int dropnum );
+      ACTION claimwax(name username, int dropnum);
       ACTION ctokendrop(
         name username, 
         name collection,
@@ -77,6 +82,17 @@ CONTRACT honefiassets : public contract {
         string img,
         string drop_name, 
         string description);
+
+        ACTION createlpool(
+          name contract_adress,
+          asset supply,
+          asset price,
+          asset deposit,
+          int token_decimals,
+          uint64_t start,
+          uint64_t end_,
+          string token_ticker
+        );
 
   private:
     TABLE tokendrop {
@@ -172,6 +188,38 @@ CONTRACT honefiassets : public contract {
         };
         typedef multi_index<name("configg"), dropconfig> configs;
         configs config_table;
+
+    //Launchpool Table
+    TABLE launchpool {
+        int dropnum;
+        name contract_adress;
+        asset supply;
+        asset price;
+        asset deposit;
+        uint64_t start;
+        int token_decimals;
+        uint64_t end_;
+        string token_ticker;
+        bool approve;
+        
+        auto primary_key() const { return dropnum; }
+      };
+      typedef multi_index<name("launchpool"), launchpool> launchpools;
+      launchpools _launchpool;
+      struct _stakeitem
+      {
+          asset balance;
+          int dropnum;
+      };
+
+    // LaunchStake Table
+    TABLE launchstake {
+          name username;
+          vector<_stakeitem> stakeitem;
+          auto primary_key() const { return username.value; }
+        };
+        typedef multi_index<name("launchstake"), launchstake> launchstakes;
+        launchstakes _launchstake;
 
     void in_contract_claim(name username, int drop_id, asset quantity);
     void in_contract_transfer(name username, asset quantity);
