@@ -118,15 +118,13 @@ ACTION honefiassets::claimlaunch( name username, int dropnum ) {
         }
     }
     check (staked == true, "You don't have enough funds");
-    float percent = deposit.amount/itr_launch->deposit.amount*100;
-    asset buy_token = itr_launch->supply;
-    buy_token.amount = buy_token.amount/100*percent;
+    auto percent = float(deposit.amount)/float(itr_launch->deposit.amount)*100;
     //send token
     action(
           permission_level{CONTRACTN, name("active")},
           itr_launch->contract_adress,
           "transfer"_n,
-          make_tuple(get_self(), username, buy_token, string("Claim launchpool tokens")))
+          make_tuple(get_self(), username, /*buy_token*/ asset{int64_t((itr_launch->supply.amount/100)*percent), itr_launch->supply.symbol}, string("Claim launchpool tokens")))
         .send();
 
     //return wax
@@ -134,13 +132,13 @@ ACTION honefiassets::claimlaunch( name username, int dropnum ) {
     asset maxdeposit = itr_launch->price;
     maxdeposit.amount = maxdeposit.amount*maxsupply;
     asset waxreturn = maxdeposit;
-    waxreturn.amount = maxdeposit.amount - (maxdeposit.amount/100*percent);
+    waxreturn.amount = maxdeposit.amount - int64_t(maxdeposit.amount/100*percent);
     //send wax
     action(
           permission_level{CONTRACTN, name("active")},
           "eosio.token"_n,
           "transfer"_n,
-          make_tuple(get_self(), username, waxreturn, string("Claim launchpool tokens")))
+          make_tuple(get_self(), username, waxreturn, string("Unstake")))
         .send();
 }
 
@@ -151,6 +149,7 @@ ACTION honefiassets::claimwax(name username, int dropnum){
     require_auth(username);
         auto itr_launch = _launchpool.find(dropnum);
     check ( itr_launch != _launchpool.end(),"Invalid dropnum");
+    check ( itr_launch->approve == false, "You have already received payment");
     //get Time
     auto now = current_time_point().sec_since_epoch();
     check ( now > itr_launch->end_, "LaunchPool is active, wait for it to finish");
@@ -170,5 +169,9 @@ ACTION honefiassets::claimwax(name username, int dropnum){
           "transfer"_n,
           make_tuple(get_self(), username, waxclaim, string("Claim launchpool tokens")))
         .send();
+
+    _launchpool.modify(itr_launch, username, [&](auto& row){
+        row.approve = true;
+    });
 }
 
