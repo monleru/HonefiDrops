@@ -216,12 +216,6 @@ Technical details:
 | username  | name | WAX Wallet |
 | dropnum  | int32  | ID of LaunchPool |
 
->**claimwax** - action to claim WAXP for the creator.
-
-| Field Name  | Type  | Description |
-|---|---|---|
-| username  | name | WAX Wallet |
-| dropnum  | int32  | ID of LaunchPool |
 #### Developing an Backend for data storage
 
 We have developed a handy backend for the HoneFi platform to store a lot of information about current drops. The main advantage:
@@ -231,3 +225,28 @@ We have developed a handy backend for the HoneFi platform to store a lot of info
 - Faster and more stable price retrieval.
 
 Our backend is available at https://api.honefi.app. We use several arguments for LaunchPool - price/ID and /launchpool/ID
+
+###  Backend Development
+
+We added some new features to the HoneFi platform by developing the Backend part:
+- [x] Backend for Auction's
+- [x] Backend for LaunchPool
+- [x] Websocket and Charts
+- [x] WAX Node for HoneFi
+
+We have developed a complete backend to display current information about live auctions and launchpools, as well as a history module to display information about past auctions and launchpools. We have added support for a test network so that users and creators can use the full functionality of the platform when testing.
+
+HoneFi's main api (backend) server - **https://api.honefi.app/api**
+Testnet api - **https://test-api.honefi.app/api**
+
+| Type  | Query  | Description |
+|---|---|---|
+| Price  | /price/#ID | This query allows you to get JSON with current prices as well as prices of past drops |
+| All Launches  | /getLaunches/  | This query allows you to get JSON with complete data on all LaunchPools |
+| LaunchPool  | /getLaunch/#ID  | This query allows you to get JSON with information on the ID of one of the LaunchPools |
+
+We have implemented a real-time price display (chart and other elements that contain the price of) for auctions (tokens and nft) by using WebSockets, which are currently publicly available - **wss://api.honefi.app/socket/$**. You can check the charts in real time on any active dropbox - https://honefi.app/drops or https://honefi.app/tokens
+
+We have launched a WAX node for our platform, RPC at the moment - https://wax.honefi.app/. We actively use the node to get all the necessary data for the platform. 
+
+We moved the platform to the main network and also added support for testnet. Currently WAX mainnet is located at https://honefi.app/, WAX testnet at https://wax-test.honefi.app/.
