@@ -8,8 +8,8 @@ For convenient activity monitoring, we have made a navigation of all currently s
 
 1. [Auction Platform](#auction-platform).
 2. [LaunchPool Platform](#launchpool-platform).
-3. [Backend Development]().
-4. [Final Stage]().
+3. [Backend Development](#backend-development).
+4. [Final Stage](#final-stage).
 
 
 ###  Auction Platform
@@ -250,3 +250,29 @@ We have implemented a real-time price display (chart and other elements that con
 We have launched a WAX node for our platform, RPC at the moment - https://wax.honefi.app/. We actively use the node to get all the necessary data for the platform. 
 
 We moved the platform to the main network and also added support for testnet. Currently WAX mainnet is located at https://honefi.app/, WAX testnet at https://wax-test.honefi.app/.
+
+###  Final Stage
+
+In the final stage of the proposal, we prepared the project for release by making:
+- [x] Developing the home page of the platform
+- [x] Writing Documentation and User Guides
+- [x] Rental of all servers required for the platform and the functioning of the node
+- [x] Resource replenishment for the Mainnet network
+
+#### Home page of the platform
+
+<img src="https://i.postimg.cc/0NP8YT2B/image.png" height="150"/> <img src="https://i.postimg.cc/mgRDjzmj/image.png" height="150"/> <img src="https://i.postimg.cc/pLZd6W7H/image.png" height="150"/>
+
+The main page is displayed when you go directly to the platform - honefi.app/, and also works for all supported networks.
+
+#### Documentation and User Guides
+
+All the basic documentation of the project can be found at https://docs.honefi.app
+
+We have prepared several sections for users:
+- https://docs.honefi.app/auctions - a collection of all the technical information and descriptions of Auctions.
+- https://docs.honefi.app/launch-pool - detailed information about LaunchPool and technical details about working with the smart contract
+- https://docs.honefi.app/honefi-api - using HoneFi API for developers.
+- https://docs.honefi.app/guides - user guides with all the basics of working with the platform.
+
+The servers to run the main HoneFi platform, the servers for the backend and api, and the node were paid for 1 year.
